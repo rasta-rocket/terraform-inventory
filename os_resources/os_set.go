@@ -42,3 +42,21 @@ func parse_resource(resource map[string]interface{}) (osr os_resource) {
 	}
 	return osr
 }
+
+func (os_set OS_Set) GetComputes() (computes OS_Set) {
+	for _, osr := range os_set {
+		if osr.IsCompute() {
+			computes = append(computes, osr)
+		}
+	}
+	return computes
+}
+
+func (os_set OS_Set) GetFloatingAssoc() (floatings OS_Set) {
+	for _, osr := range os_set {
+		if osr.IsFloatingAssoc() {
+			floatings = append(floatings, osr)
+		}
+	}
+	return floatings
+}
