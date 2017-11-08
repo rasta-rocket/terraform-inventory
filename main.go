@@ -13,7 +13,4 @@ func main() {
 	os_res.Init(tf_file_name)
 	os_inv.Init(os_res)
 	os_inv.GenInventory("test.ini")
-	//fmt.Printf("%+v\n", os_res)
-	//inventory.Test()
-
 }
