@@ -1,4 +1,4 @@
-package os_resources
+package openstack
 
 type os_resource struct {
 	os_type    string

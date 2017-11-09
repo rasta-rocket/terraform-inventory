@@ -1,19 +1,20 @@
-package inventory
+package ansible
 
 import (
 	"fmt"
 	"io/ioutil"
 )
 
-const FILE_RIGHT = 0644
-
 type Inventory struct {
 	name    string
 	content string
 }
 
-func (inventory *Inventory) Init(filename string) {
-	inventory.name = filename
+func NewAnsibleInventory(name string) Inventory {
+	return Inventory{
+		name:    name,
+		content: "",
+	}
 }
 
 func (inventory *Inventory) AddGroup(groupname string) {
@@ -40,8 +41,7 @@ func (inventory *Inventory) Save() {
 }
 
 func Test() {
-	inventory := Inventory{}
-	inventory.Init("inventory.ini")
+	inventory := NewAnsibleInventory("inventory.ini")
 	inventory.AddGroup("web")
 	inventory.AddHost("apache", "10.0.0.3", "cloud", "key")
 	inventory.AddHost("mysql", "10.0.0.4", "cloud", "key", "192.168.10.3")

@@ -1,4 +1,4 @@
-package os_resources
+package openstack
 
 import (
 	"encoding/json"
