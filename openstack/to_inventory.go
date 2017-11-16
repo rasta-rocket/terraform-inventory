@@ -6,7 +6,7 @@ import (
 
 type AnsibleHosts []ansible.AnsibleHost
 
-func ToInventory(name string, set OS_Set) {
+func ToInventory(name string, set Set) {
 	hosts := AnsibleHosts{}
 	computes := set.GetComputes()
 

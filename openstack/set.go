@@ -5,16 +5,16 @@ import (
 	"io/ioutil"
 )
 
-type OS_Set []os_resource
+type Set []Resource
 
-func (os_set *OS_Set) Init(tf_file_name string) {
+func (os_set *Set) Init(tf_file_name string) {
 	var tfstate map[string]interface{}
 	content, _ := ioutil.ReadFile(tf_file_name)
 	_ = json.Unmarshal(content, &tfstate)
 	*os_set = append(*os_set, parse_tfstate(tfstate)...)
 }
 
-func parse_tfstate(tfstate map[string]interface{}) (os_set OS_Set) {
+func parse_tfstate(tfstate map[string]interface{}) (os_set Set) {
 	modules := tfstate["modules"].([]interface{})
 	for _, module := range modules {
 		osr_list := parse_module(module.(map[string]interface{}))
@@ -23,7 +23,7 @@ func parse_tfstate(tfstate map[string]interface{}) (os_set OS_Set) {
 	return os_set
 }
 
-func parse_module(module map[string]interface{}) (osr_list []os_resource) {
+func parse_module(module map[string]interface{}) (osr_list []Resource) {
 	resources := module["resources"].(map[string]interface{})
 	for _, res := range resources {
 		osr := parse_resource(res.(map[string]interface{}))
@@ -32,7 +32,7 @@ func parse_module(module map[string]interface{}) (osr_list []os_resource) {
 	return osr_list
 }
 
-func parse_resource(resource map[string]interface{}) (osr os_resource) {
+func parse_resource(resource map[string]interface{}) (osr Resource) {
 	osr.Init()
 	osr.os_type = resource["type"].(string)
 	res_primary := resource["primary"].(map[string]interface{})
@@ -43,7 +43,7 @@ func parse_resource(resource map[string]interface{}) (osr os_resource) {
 	return osr
 }
 
-func (os_set OS_Set) GetComputes() (computes OS_Set) {
+func (os_set Set) GetComputes() (computes Set) {
 	for _, osr := range os_set {
 		if osr.IsCompute() {
 			computes = append(computes, osr)
@@ -52,7 +52,7 @@ func (os_set OS_Set) GetComputes() (computes OS_Set) {
 	return computes
 }
 
-func (os_set OS_Set) GetFloatingAssoc() (floatings OS_Set) {
+func (os_set Set) GetFloatingAssoc() (floatings Set) {
 	for _, osr := range os_set {
 		if osr.IsFloatingAssoc() {
 			floatings = append(floatings, osr)

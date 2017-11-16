@@ -18,7 +18,7 @@ var RootCmd = &cobra.Command{
 func run() {
 	tfstate := configuration.Conf.Tfstate
 	inventory := configuration.Conf.OutputFile
-	var set openstack.OS_Set
+	var set openstack.Set
 	set.Init(tfstate)
 	openstack.ToInventory(inventory, set)
 }
