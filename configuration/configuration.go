@@ -7,6 +7,8 @@ import (
 type Configuration struct {
 	Tfstate    string
 	OutputFile string
+	SshUser    string
+	SshKey     string
 }
 
 func (conf *Configuration) Init() {
