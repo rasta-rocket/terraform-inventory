@@ -7,20 +7,25 @@ import (
 
 type Set []Resource
 
-func (os_set *Set) Init(tf_file_name string) {
+func NewSet(tf_file_name string) (set Set) {
+	set.Init(tf_file_name)
+	return set
+}
+
+func (set *Set) Init(tf_file_name string) {
 	var tfstate map[string]interface{}
 	content, _ := ioutil.ReadFile(tf_file_name)
 	_ = json.Unmarshal(content, &tfstate)
-	*os_set = append(*os_set, parse_tfstate(tfstate)...)
+	*set = append(*set, parse_tfstate(tfstate)...)
 }
 
-func parse_tfstate(tfstate map[string]interface{}) (os_set Set) {
+func parse_tfstate(tfstate map[string]interface{}) (set Set) {
 	modules := tfstate["modules"].([]interface{})
 	for _, module := range modules {
 		osr_list := parse_module(module.(map[string]interface{}))
-		os_set = append(os_set, osr_list...)
+		set = append(set, osr_list...)
 	}
-	return os_set
+	return set
 }
 
 func parse_module(module map[string]interface{}) (osr_list []Resource) {
@@ -43,8 +48,8 @@ func parse_resource(resource map[string]interface{}) (osr Resource) {
 	return osr
 }
 
-func (os_set Set) GetComputes() (computes Set) {
-	for _, osr := range os_set {
+func (set Set) GetComputes() (computes Set) {
+	for _, osr := range set {
 		if osr.IsCompute() {
 			computes = append(computes, osr)
 		}
@@ -52,8 +57,8 @@ func (os_set Set) GetComputes() (computes Set) {
 	return computes
 }
 
-func (os_set Set) GetFloatingAssoc() (floatings Set) {
-	for _, osr := range os_set {
+func (set Set) GetFloatingAssoc() (floatings Set) {
+	for _, osr := range set {
 		if osr.IsFloatingAssoc() {
 			floatings = append(floatings, osr)
 		}

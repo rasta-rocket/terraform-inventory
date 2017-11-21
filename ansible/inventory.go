@@ -5,45 +5,47 @@ import (
 	"io/ioutil"
 )
 
+type Group []AnsibleHost
+
 type Inventory struct {
-	name    string
-	content string
+	name   string
+	groups map[string]Group
 }
 
-func NewAnsibleInventory(name string) Inventory {
+func NewInventory(name string) Inventory {
 	return Inventory{
-		name:    name,
-		content: "",
+		name:   name,
+		groups: make(map[string]Group),
 	}
 }
 
-func (inventory *Inventory) AddGroup(groupname string) {
-	result := fmt.Sprintf("[%s]\n", groupname)
-	inventory.content += result
-}
-
-func (inventory *Inventory) AddHost(host_name, host_ip, ssh_user, ssh_key string, ssh_common_args ...string) {
-	ansible_host := "ansible_host=" + host_ip
-	ansible_user := "ansible_user=" + ssh_user
-	ansible_ssh_key := "ansible_ssh_private_key_file=" + ssh_key
-
-	result := fmt.Sprintf("%s %s %s %s", host_name, ansible_host, ansible_user, ansible_ssh_key)
-
-	for _, bastion_ip := range ssh_common_args {
-		ansible_ssh_common_args := "ansible_ssh_common_args='-o ProxyCommand=\"ssh -W %h:%p " + bastion_ip + "\"'"
-		result = fmt.Sprintf("%s %s", result, ansible_ssh_common_args)
+func (inventory *Inventory) String() string {
+	content := ""
+	for group, hosts := range inventory.groups {
+		if len(group) != 0 {
+			content += fmt.Sprintf("[%s]\n", group)
+		}
+		for _, host := range hosts {
+			content += host.String()
+		}
 	}
-	inventory.content += result + "\n"
+	return content
 }
 
 func (inventory *Inventory) Save() {
-	_ = ioutil.WriteFile(inventory.name, []byte(inventory.content), FILE_RIGHT)
+	content := inventory.String()
+	_ = ioutil.WriteFile(inventory.name, []byte(content), FILE_RIGHT)
 }
 
-func Test() {
-	inventory := NewAnsibleInventory("inventory.ini")
-	inventory.AddGroup("web")
-	inventory.AddHost("apache", "10.0.0.3", "cloud", "key")
-	inventory.AddHost("mysql", "10.0.0.4", "cloud", "key", "192.168.10.3")
-	inventory.Save()
+func (inventory *Inventory) AddHost(groups []string, name, ssh_host, ssh_user, ssh_key, bastion_ip string) {
+	if len(groups) == 0 {
+		groups = []string{""}
+	}
+	for _, group := range groups {
+		host := NewAnsibleHost(group, name, ssh_host, ssh_user, ssh_key, bastion_ip)
+		if _, ok := inventory.groups[group]; !ok {
+			inventory.groups[group] = Group{}
+		}
+		inventory.groups[group] = append(inventory.groups[group], host)
+	}
 }

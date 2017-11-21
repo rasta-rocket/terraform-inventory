@@ -1,5 +1,9 @@
 package openstack
 
+import (
+	"strings"
+)
+
 type Resource struct {
 	os_type    string
 	attributes map[string]string
@@ -32,6 +36,14 @@ func (osr Resource) GetComputeKey() (key string) {
 		key = osr.attributes["key_pair"]
 	}
 	return key
+}
+
+func (osr Resource) GetComputeAnsibleGroups() (groups []string) {
+	if osr.IsCompute() {
+		tmp := strings.Replace(osr.attributes["metadata.ansible_group"], GROUP_IFS, " ", -1)
+		groups = strings.Fields(tmp)
+	}
+	return groups
 }
 
 func (osr Resource) IsCompute() bool {
