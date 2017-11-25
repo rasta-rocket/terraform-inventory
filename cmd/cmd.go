@@ -10,7 +10,6 @@ var RootCmd = &cobra.Command{
 	Use:   "terraform-inventory",
 	Short: "terraform-inventory generates Ansible inventory based on Terraform deployment",
 	Run: func(cmd *cobra.Command, args []string) {
-		//_ = ansible.NewConfiguration("./ansible.cfg")
 		run()
 	},
 }

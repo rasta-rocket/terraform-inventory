@@ -46,6 +46,13 @@ func (osr Resource) GetComputeAnsibleGroups() (groups []string) {
 	return groups
 }
 
+func (osr Resource) GetFloatingInstanceId() (id string) {
+	if osr.IsFloatingAssoc() {
+		id = osr.attributes["instance_id"]
+	}
+	return id
+}
+
 func (osr Resource) IsCompute() bool {
 	return osr.os_type == COMPUTE_TYPE
 }
