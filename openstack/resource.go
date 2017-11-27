@@ -53,6 +53,13 @@ func (osr Resource) GetFloatingInstanceId() (id string) {
 	return id
 }
 
+func (osr Resource) GetFloatingIp() (ip string) {
+	if osr.IsFloatingAssoc() {
+		ip = osr.attributes["floating_ip"]
+	}
+	return ip
+}
+
 func (osr Resource) IsCompute() bool {
 	return osr.os_type == COMPUTE_TYPE
 }

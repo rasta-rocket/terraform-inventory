@@ -21,9 +21,10 @@ func ToInventory(set Set, name string) {
 		ssh_host := compute.GetComputeIp()
 		ssh_user := configuration.Conf.SshUser
 		ssh_key := configuration.Conf.SshKey
-		bastion_ip := ""
-		if strings.Compare(bst_id, compute.GetId()) != 0 {
-			bastion_ip = bst_ip
+		bastion_ip := bst_ip
+		if strings.Compare(bst_id, compute.GetId()) == 0 {
+			ssh_host = bst_ip
+			bastion_ip = ""
 		}
 
 		inventory.AddHost(groups, name, ssh_host, ssh_user, ssh_key, bastion_ip)
@@ -41,7 +42,7 @@ func getBastion(floatings Set, computes Set) (string, string, string) {
 			fip_id := floating.GetFloatingInstanceId()
 			compute_id := compute.GetId()
 			if strings.Compare(fip_id, compute_id) == 0 {
-				bst := fmt.Sprintf("%-40s %-30s %s", compute.GetId(), compute.GetComputeName(), compute.GetComputeIp())
+				bst := fmt.Sprintf("%-40s %-30s %s", compute_id, compute.GetComputeName(), floating.GetFloatingIp())
 				bastion_list = append(bastion_list, bst)
 			}
 		}
