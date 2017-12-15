@@ -1,21 +1,23 @@
 # Terraform Inventory
 Terraform Inventory is a tool that generate an Ansible inventory based on a Terraform deployment.
 
-### Download
-You can download the released [binaries](https://github.com/rasta-rocket/terraform-inventory/releases)
+### Installation from binary
+You can download the released [binaries](https://github.com/rasta-rocket/terraform-inventory/releases) and put it in your system PATH.
 
-### Installation
+### Installation from source
 [Go](https://golang.org/) and [dep](https://github.com/golang/dep) are required to build this tool.
-Then install terraform inventory from github sources
+Then install terraform-inventory from github sources.
 
-```sh
-$ git clone https://github.com/rasta-rocket/terraform-inventory
+```
+$ cd $GOPATH/src
+$ git clone https://github.com/rasta-rocket/terraform-inventory github.com/rasta-rocket/terraform-inventory
+$ cd github.com/rasta-rocket/terraform-inventory
 $ dep ensure
 $ go install
 ```
 
 ### Usage
-```sh
+```
 $ terraform apply
 $ terraform-inventory
 ? Choose a bastion :
