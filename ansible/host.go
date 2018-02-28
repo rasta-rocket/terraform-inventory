@@ -23,13 +23,15 @@ func NewAnsibleHost(group, name, ssh_host, ssh_user, ssh_key, bastion_ip string)
 }
 
 func (host AnsibleHost) String() string {
-	ansible_name := host.name
 	var (
-		ansible_host            string
-		ansible_user            string
-		ansible_ssh_key         string
-		ansible_ssh_common_args string
+		ansible_host    string
+		ansible_user    string
+		ansible_ssh_key string
 	)
+
+	ansible_name := host.name
+	no_host_check := "-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no"
+	ansible_ssh_common_args := " ansible_ssh_common_args='" + no_host_check
 
 	if host.ssh_host != "" {
 		ansible_host = " ansible_host=" + host.ssh_host
@@ -41,8 +43,9 @@ func (host AnsibleHost) String() string {
 		ansible_ssh_key = " ansible_ssh_private_key_file=" + host.ssh_key
 	}
 	if host.bastion_ip != "" {
-		ansible_ssh_common_args = " ansible_ssh_common_args='-o ProxyCommand=\"ssh -W %h:%p " + host.bastion_ip + "\"'"
+		ansible_ssh_common_args += " -o ProxyCommand=\"ssh " + no_host_check + " -W %h:%p " + host.bastion_ip + "\""
 	}
+	ansible_ssh_common_args += "'"
 	content := fmt.Sprintf("%s%s%s%s%s\n", ansible_name, ansible_host, ansible_user, ansible_ssh_key, ansible_ssh_common_args)
 	return content
 }
