@@ -43,7 +43,7 @@ func (host AnsibleHost) String() string {
 		ansible_ssh_key = " ansible_ssh_private_key_file=" + host.ssh_key
 	}
 	if host.bastion_ip != "" {
-		ansible_ssh_common_args += " -o ProxyCommand=\"ssh " + no_host_check + " -W %h:%p " + host.bastion_ip + "\""
+		ansible_ssh_common_args += " -o ProxyCommand=\"ssh " + no_host_check + " -W %h:%p -i " + host.ssh_key + " " + host.bastion_ip + "\""
 	}
 	ansible_ssh_common_args += "'"
 	content := fmt.Sprintf("%s%s%s%s%s\n", ansible_name, ansible_host, ansible_user, ansible_ssh_key, ansible_ssh_common_args)
