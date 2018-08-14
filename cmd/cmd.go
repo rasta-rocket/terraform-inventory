@@ -26,9 +26,10 @@ var RootCmd = &cobra.Command{
 func run(conf configuration.Configuration) {
 	tfstate := conf.TfState
 	inventory := conf.OutputFile
+	bastion := opt.Bastion
 
 	set := openstack.NewSet(tfstate)
-	openstack.ToInventory(set, inventory)
+	openstack.ToInventory(set, inventory, bastion)
 }
 
 func displayVersion(isVersion bool) {
@@ -44,4 +45,5 @@ func init() {
 	RootCmd.Flags().StringVarP(&opt.OutputFile, "output", "o", options.DEFAULT_OUTPUT, "ansible inventory file path to output")
 	RootCmd.Flags().StringVarP(&opt.SshUser, "ssh-user", "u", options.DEFAULT_SSH_USER, "ansible ssh user")
 	RootCmd.Flags().StringVarP(&opt.SshKey, "ssh-key", "k", options.DEFAULT_SSH_KEY, "ansible ssh key")
+	RootCmd.Flags().StringVarP(&opt.Bastion, "bastion", "b", options.DEFAULT_BASTION, "force the IP address of the bastion you want to use")
 }

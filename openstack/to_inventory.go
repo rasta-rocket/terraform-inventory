@@ -9,10 +9,16 @@ import (
 	"github.com/rasta-rocket/terraform-inventory/configuration"
 )
 
-func ToInventory(set Set, name string) {
+func ToInventory(set Set, name string, bastion string) {
 	computes := set.GetComputes()
 	floatings := set.GetFloatingAssoc()
-	bst_id, _, bst_ip := getBastion(floatings, computes)
+	bst_id, bst_ip := "", bastion
+
+	if len(bastion) == 0 {
+		bst_id, _, bst_ip = getBastion(floatings, computes)
+	}
+
+	fmt.Printf("Inventory file is configured with %s as bastion (ssh-proxy)\n", bst_ip)
 
 	inventory := ansible.NewInventory(name)
 	for _, compute := range computes {

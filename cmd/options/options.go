@@ -6,4 +6,5 @@ type Options struct {
 	OutputFile string
 	SshUser    string
 	SshKey     string
+	Bastion    string
 }

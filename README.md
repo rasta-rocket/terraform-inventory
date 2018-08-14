@@ -25,11 +25,21 @@ $ go install
 ```
 
 ### Usage
+Basic usage:
 ```
 $ terraform apply
-$ terraform-inventory
+$ terraform-inventory -u <ssh_user> -k <ssh_key>
 ? Choose a bastion :
-❯ e1b52c07-8a75-4527-b43f-850aaec4c3ef     bastion_0                      84.39.63.203
+❯ e1b52c07-8a75-4527-b43f-850aaec4c3ef     bastion_0                      172.16.1.23
+Inventory file is configured with 172.16.1.23 as bastion (ssh-proxy)
+$ cat hosts
+$ ansible -m ping all
+```
+You can also force the bastion IP you want to use:
+```
+$ terraform apply
+$ terraform-inventory -u <ssh_user> -k <ssh_key> --bastion 172.16.1.25
+Inventory file is configured with 172.16.1.25 as bastion (ssh-proxy)
 $ cat hosts
 $ ansible -m ping all
 ```
