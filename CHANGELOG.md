@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2018-08-14
+### Added
+- Add bastion option
+- Update constraint depedencies to latest stable version
+- Add ssh_user in the proxy command
+
 ## [1.1.0] - 2018-03-20
 ### Added
 - Make the inventory completely independent from the ssh configuration of the user:
