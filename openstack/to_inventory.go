@@ -18,7 +18,9 @@ func ToInventory(set Set, name string, bastion string) {
 		bst_id, _, bst_ip = getBastion(floatings, computes)
 	}
 
-	fmt.Printf("Inventory file is configured with %s as bastion (ssh-proxy)\n", bst_ip)
+	if len(bst_ip) > 0 {
+		fmt.Printf("Inventory file is configured with %s as bastion (ssh-proxy)\n", bst_ip)
+	}
 
 	inventory := ansible.NewInventory(name)
 	for _, compute := range computes {
@@ -52,6 +54,10 @@ func getBastion(floatings Set, computes Set) (string, string, string) {
 				bastion_list = append(bastion_list, bst)
 			}
 		}
+	}
+
+	if len(bastion_list) == 0 {
+		return "", "", ""
 	}
 
 	// Prompt the user to get the good bastion
