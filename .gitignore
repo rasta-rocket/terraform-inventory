@@ -3,4 +3,4 @@
 *.ini
 terraform-inventory
 vendor
-Gopkg.lock
+hosts

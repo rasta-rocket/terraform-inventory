@@ -13,15 +13,12 @@ $ terraform-inventory --help
 ```
 
 ### Installation from source
-[Go](https://golang.org/) and [dep](https://github.com/golang/dep) are required to build this tool.
-Then install terraform-inventory from github sources.
+[Go 1.11.x](https://golang.org/) is required to build this tool.
+Then fetch terraform-inventory from github sources.
 
 ```
-$ cd $GOPATH/src
-$ git clone https://github.com/rasta-rocket/terraform-inventory github.com/rasta-rocket/terraform-inventory
-$ cd github.com/rasta-rocket/terraform-inventory
-$ dep ensure
-$ go install
+$ git clone https://github.com/rasta-rocket/terraform-inventory
+$ go build
 ```
 
 ### Usage
