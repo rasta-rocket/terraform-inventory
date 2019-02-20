@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/AlecAivazis/survey"
 	"github.com/rasta-rocket/terraform-inventory/ansible"
 	"github.com/rasta-rocket/terraform-inventory/configuration"
+	"gopkg.in/AlecAivazis/survey.v1"
 )
 
 func ToInventory(set Set, name string, bastion string) {
